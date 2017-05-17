@@ -1,0 +1,60 @@
+html, body, .app {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-size: 12px;
+    font-family: Helvetica;
+    background-color
+}
+
+.app.invalid {
+    background-color: red;
+}
+
+.app {
+    background-color: lightgreen;
+}
+
+.draggable {
+    height: 22px;
+    -webkit-app-region: drag;
+}
+
+.record {
+    cursor: pointer;
+    height: calc(100%);
+    color: #333;
+    font-size: 1rem;
+    text-align: center;
+    justify-content:center;
+    align-content:center;
+    flex-direction:column;
+    margin-top: -22px;
+    display: none;
+}
+
+.record.loaded {
+    display: flex;
+}
+
+.active .draggable, .active .record {
+    background-color: lightred;
+}
+
+.record:hover {
+    color: #999;
+}
+
+.record p {
+    margin-top: 0px;
+}
+
+.record h1 {
+    margin-bottom: 5px;
+}
+
+.settings {
+    height: 30%;
+    background-color: lightblue;
+}

@@ -1,0 +1,47 @@
+{
+    "name": "GifGrabber",
+    "version": "1.0.0",
+    "description": "A screen to Gif converter",
+    "autor": "Christoffer Hasselberg",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "pack": "build --dir",
+        "dist": "build --win --mac"
+    },
+    "repository": "https://github.com/electron/electron-quick-start",
+    "keywords": [
+        "Electron",
+        "quick",
+        "start",
+        "tutorial",
+        "demo"
+    ],
+    "author": "GitHub",
+    "license": "MIT",
+    "build": {
+        "appId": "gifgrabber.io",
+        "files": [
+            "**/*",
+            "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme,test,__tests__,tests,powered-test,example,examples,*.d.ts}",
+            "!**/node_modules/.bin",
+            "!**/*.{o,hprof,orig,pyc,pyo,rbc}",
+            "!**/._*",
+            "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,__pycache__,thumbs.db,.gitignore,.gitattributes,.editorconfig,.flowconfig,.yarn-metadata.json,.idea,appveyor.yml,.travis.yml,circle.yml,npm-debug.log,.nyc_output,yarn.lock,.yarn-integrity}",
+            "!binaries/**/*",
+            "binaries/${os}-${arch}/**/*"
+        ],
+        "asar": false,
+        "mac": {
+            "category": "gifgrabber.io.utils.screenrecorder"
+        }
+    },
+    "devDependencies": {
+        "electron": "~1.6.2"
+    },
+    "dependencies": {
+        "fluent-ffmpeg": "^2.1.2",
+        "moment": "^2.18.1",
+        "vue": "^2.3.3"
+    }
+}

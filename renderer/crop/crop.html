@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>cropwindow</title>
+        <style>
+            html, body, div {
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            div.app.invalid {
+                border: 3px dashed red;
+            }
+
+            div.app {
+                border: 3px dashed green;
+            }
+
+            .draggable {
+                -webkit-app-region: drag;
+                cursor: grab;
+            }
+
+            .draggable:hover {
+                cursor: -webkit-drag;
+            }
+
+            .draggable:active {
+                cursor: grabbing;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="app" v-bind:class="{ draggable: isDraggable, invalid: !isValid }">
+        </div>
+    </body>
+    <script src="../../node_modules/vue/dist/vue.js" charset="utf-8"></script>
+    <script>
+        const { ipcRenderer} = require('electron');
+
+        const app = new Vue({
+            el: '.app',
+            data: {
+                isDraggable: true,
+                isValid: true
+            },
+            methods: {
+            }
+        });
+
+        ipcRenderer.on('RecordingStarted', () => {
+            app.isDraggable = false;
+        });
+
+        ipcRenderer.on('RecordingStopped', () => {
+            app.isDraggable = true;
+        });
+
+        ipcRenderer.on('CropWindowMoved', (event, data) => {
+            app.isValid = data.valid;
+        });
+    </script>
+</html>
