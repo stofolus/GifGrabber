@@ -20,30 +20,33 @@ class Capturer {
     }
 
     start() {
-        navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: {
-                mandatory: {
-                    chromeMediaSource: 'desktop',
-                    chromeMediaSourceId: `screen:${this._crop.display.id}`,
-                    maxWidth: this._crop.display.bounds.width,
-                    maxHeight: this._crop.display.bounds.height
-                }
-            }
-        })
-        .then(stream => {
-            this._stream = stream;
-            this.active = true;
-            this._data = [];
-            this._recorder = new MediaRecorder(this._stream);
-            this._recorder.ondataavailable = (event) => { this._storeData(event) };
-            this._recorder.start();
-            this._tempFile = path.join(remote.app.getPath('temp'), 'tmp.webm');
-            this._desktop = remote.app.getPath('desktop');
-        })
-        .catch(error => {
-            console.error(error);
-        });
+        this._getSourceId()
+            .then(screenId => {
+                return navigator.mediaDevices.getUserMedia({
+                    audio: false,
+                    video: {
+                        mandatory: {
+                            chromeMediaSource: 'desktop',
+                            chromeMediaSourceId: screenId,
+                            maxWidth: this._crop.display.bounds.width,
+                            maxHeight: this._crop.display.bounds.height
+                        }
+                    }
+                });
+            })
+            .then(stream => {
+                this._stream = stream;
+                this.active = true;
+                this._data = [];
+                this._recorder = new MediaRecorder(this._stream);
+                this._recorder.ondataavailable = (event) => { this._storeData(event) };
+                this._recorder.start();
+                this._tempFile = path.join(remote.app.getPath('temp'), 'tmp.webm');
+                this._desktop = remote.app.getPath('desktop');
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     stop() {
@@ -88,7 +91,26 @@ class Capturer {
     }
 
     _getFileName() {
-        return `screenrec_${moment().format('YYYY-MM-DD_HH:mm:ss')}.gif`;
+        return `screenrec_${moment().format('YYYY-MM-DD_HH-mm-ss')}.gif`;
+    }
+
+    _getSourceId() {
+        return new Promise((resolve, reject) => {
+            desktopCapturer.getSources({types: ['screen']}, (error, sources) => {
+                if(error) {
+                    reject(error);
+                } else {
+                    if(sources.length === 1) {
+                        resolve(sources[0].id)
+                    } else {
+                        let screen = sources.find(source => {
+                            return source.id.includes(this._crop.display.id)
+                        });
+                        resolve(screen.id);
+                    }
+                }
+            });
+        });
     }
 }
 
