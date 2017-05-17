@@ -15,6 +15,8 @@ function createWindow() {
         acceptFirstMouse: true,
         titleBarStyle: 'hidden',
     });
+    mainWindow.setMenu(null);
+
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'renderer/index.html'),
